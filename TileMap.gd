@@ -147,12 +147,17 @@ func clear_piece():
 		erase_cell(active_layer, cur_pos + i)
 
 func draw_piece(piece, pos, atlas):
+	print_debug(str(piece))
 	for i in piece:
-		if i == Vector2i(1,2): 
-			atlas = Vector2i(3,0)
-			set_cell(active_layer, pos + i, tile_id, atlas)
+	#criar aqui condicionais para troca de cor dos tiles de acordo com a peça
+		if piece == j_270:
+			if i == Vector2i(1,2): 
+				atlas = Vector2i(3,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+			else: 
+				set_cell(active_layer, pos + i, tile_id, atlas)
 		else: 
-			set_cell(active_layer, pos + i, tile_id, atlas)
+				set_cell(active_layer, pos + i, tile_id, atlas)
 
 func rotate_piece():
 	if can_rotate():
