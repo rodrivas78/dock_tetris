@@ -44,6 +44,7 @@ var j_270 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
 var shapes := [i, t, o, z, s, l, j]
+#var shapes := [j]
 var shapes_full := shapes.duplicate()
 
 #grid variables
@@ -147,7 +148,11 @@ func clear_piece():
 
 func draw_piece(piece, pos, atlas):
 	for i in piece:
-		set_cell(active_layer, pos + i, tile_id, atlas)
+		if i == Vector2i(1,2): 
+			atlas = Vector2i(3,0)
+			set_cell(active_layer, pos + i, tile_id, atlas)
+		else: 
+			set_cell(active_layer, pos + i, tile_id, atlas)
 
 func rotate_piece():
 	if can_rotate():
@@ -196,7 +201,11 @@ func land_piece():
 	#remove each segment from the active layer and move to board layer
 	for i in active_piece:
 		erase_cell(active_layer, cur_pos + i)
-		set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		if i == Vector2i(1,2): 
+			piece_atlas = Vector2i(3,0)
+			set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		else:
+			set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
 
 func clear_panel():
 	for i in range(14, 19):
