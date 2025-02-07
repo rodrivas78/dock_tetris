@@ -147,7 +147,6 @@ func clear_piece():
 		erase_cell(active_layer, cur_pos + i)
 
 func draw_piece(piece, pos, atlas):
-	print_debug(str(piece))
 	for i in piece:
 	#criar aqui condicionais para troca de cor dos tiles de acordo com a peça
 		if piece == j_270:
