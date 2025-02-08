@@ -198,7 +198,7 @@ func move_piece(dir):
 	else:
 		if dir == Vector2i.DOWN:
 			land_piece()
-			check_rows()
+			#check_rows()
 			piece_type = next_piece_type
 			piece_atlas = next_piece_atlas
 			next_piece_type = pick_piece()
@@ -266,14 +266,42 @@ func land_piece():
 	# Atualiza os tiles adjacentes após a peça pousar
 	update_adjacent_tiles()
 
+#func update_adjacent_tiles():
+	#var directions = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+#
+	#for pos in special_positions:
+		#var occupied_count = 0
+		#
+		## Conta quantas posições adjacentes estão ocupadas
+		#for dir in directions:
+			#if not is_free(pos + dir):
+				#occupied_count += 1
+		#
+		## Define a nova cor com base no número de espaços ocupados ao redor
+		#var new_atlas = Vector2i(piece_atlas.x + occupied_count, 0)
+		#set_cell(active_layer, pos, tile_id, new_atlas)
+		
 func update_adjacent_tiles():
 	var directions = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+
 	for pos in special_positions:
+		var occupied_count = 0
+		
+		# Conta quantas posições adjacentes estão ocupadas
 		for dir in directions:
-			var adjacent_pos = pos + dir
-			if not is_free(adjacent_pos):
-				var new_atlas = Vector2i(piece_atlas.x + 1, 0)
-				set_cell(active_layer, pos, tile_id, new_atlas)
+			if not is_free(pos + dir):
+				occupied_count += 1
+		
+		# Define a cor apenas para 2, 3 ou 4 espaços ocupados
+		var new_atlas = piece_atlas  # Mantém a cor original por padrão
+		
+		if occupied_count == 2:
+			new_atlas = Vector2i(piece_atlas.x + 1, 0)
+		elif occupied_count >= 3:  # Para 3 ou 4 ocupados, usa o mesmo valor
+			new_atlas = Vector2i(piece_atlas.x + 2, 0)
+		
+		set_cell(active_layer, pos, tile_id, new_atlas)
+
 
 func clear_panel():
 	for i in range(14, 19):
