@@ -43,8 +43,8 @@ var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
-var shapes := [i, t, o, z, s, l, j]
-#var shapes := [j]
+#var shapes := [i, t, o, z, s, l, j]
+var shapes := [j]
 var shapes_full := shapes.duplicate()
 
 #grid variables
@@ -149,11 +149,33 @@ func clear_piece():
 func draw_piece(piece, pos, atlas):
 	for i in piece:
 	#criar aqui condicionais para troca de cor dos tiles de acordo com a peça
-		if piece == j_270:
-			if i == Vector2i(1,2): 
+		if piece == j_0:
+			if i == Vector2i(0,0) or i == Vector2i(2,1): 
 				atlas = Vector2i(3,0)
 				set_cell(active_layer, pos + i, tile_id, atlas)
 			else: 
+				atlas = Vector2i(0,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+		elif piece == j_90:
+			if i == Vector2i(2,0) or i == Vector2i(1,2):
+				atlas = Vector2i(3,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+			else:
+				atlas = Vector2i(0,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+		elif piece == j_180:
+			if i == Vector2i(0,1) or i == Vector2i(2,2):
+				atlas = Vector2i(3,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+			else:
+				atlas = Vector2i(0,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+		elif piece == j_270:
+			if i == Vector2i(0,2) or i == Vector2i(1,0):
+				atlas = Vector2i(3,0)
+				set_cell(active_layer, pos + i, tile_id, atlas)
+			else:
+				atlas = Vector2i(0,0)
 				set_cell(active_layer, pos + i, tile_id, atlas)
 		else: 
 				set_cell(active_layer, pos + i, tile_id, atlas)
@@ -205,11 +227,34 @@ func land_piece():
 	#remove each segment from the active layer and move to board layer
 	for i in active_piece:
 		erase_cell(active_layer, cur_pos + i)
-		if i == Vector2i(1,2): 
-			piece_atlas = Vector2i(3,0)
-			set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
-		else:
-			set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		if active_piece == j_0:
+			if i == Vector2i(0,0) or i == Vector2i(2,1): 
+				piece_atlas = Vector2i(3,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+			else: 
+				piece_atlas = Vector2i(0,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		elif active_piece == j_90:
+			if i == Vector2i(2,0) or i == Vector2i(1,2):
+				piece_atlas = Vector2i(3,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+			else:
+				piece_atlas = Vector2i(0,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		elif active_piece == j_180:
+			if i == Vector2i(0,1) or i == Vector2i(2,2):
+				piece_atlas = Vector2i(3,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+			else:
+				piece_atlas = Vector2i(0,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+		elif active_piece == j_270:
+			if i == Vector2i(0,2) or i == Vector2i(1,0):
+				piece_atlas = Vector2i(3,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+			else:
+				piece_atlas = Vector2i(0,0)
+				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
 
 func clear_panel():
 	for i in range(14, 19):
