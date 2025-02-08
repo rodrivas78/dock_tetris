@@ -279,7 +279,7 @@ func update_adjacent_tiles():
 				occupied_count += 1	
 		# Define a cor apenas para 2, 3 ou 4 espaços ocupados
 		var new_atlas = piece_atlas  # Mantém a cor original por padrão
-		if occupied_count	== 1:
+		if occupied_count == 1:
 			new_atlas = Vector2i(3, 0)
 		elif occupied_count == 2:
 			new_atlas = Vector2i(3 + 1, 0)
