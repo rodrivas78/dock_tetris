@@ -80,6 +80,9 @@ var next_piece_atlas : Vector2i
 var board_layer : int = 0
 var active_layer : int = 1
 
+#store special positions
+var special_positions := []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	new_game()
@@ -195,7 +198,7 @@ func move_piece(dir):
 	else:
 		if dir == Vector2i.DOWN:
 			land_piece()
-			check_rows()
+			#check_rows()
 			piece_type = next_piece_type
 			piece_atlas = next_piece_atlas
 			next_piece_type = pick_piece()
@@ -224,13 +227,14 @@ func is_free(pos):
 	return get_cell_source_id(board_layer, pos) == -1
 
 func land_piece():
-	#remove each segment from the active layer and move to board layer
+	# Remove cada segmento da camada ativa e move para a camada do tabuleiro
 	for i in active_piece:
 		erase_cell(active_layer, cur_pos + i)
 		if active_piece == j_0:
 			if i == Vector2i(0,0) or i == Vector2i(2,1): 
 				piece_atlas = Vector2i(3,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+				special_positions.append(cur_pos + i) # Armazena posições especiais
 			else: 
 				piece_atlas = Vector2i(0,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
@@ -238,6 +242,7 @@ func land_piece():
 			if i == Vector2i(2,0) or i == Vector2i(1,2):
 				piece_atlas = Vector2i(3,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+				special_positions.append(cur_pos + i)
 			else:
 				piece_atlas = Vector2i(0,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
@@ -245,6 +250,7 @@ func land_piece():
 			if i == Vector2i(0,1) or i == Vector2i(2,2):
 				piece_atlas = Vector2i(3,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+				special_positions.append(cur_pos + i)
 			else:
 				piece_atlas = Vector2i(0,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
@@ -252,9 +258,37 @@ func land_piece():
 			if i == Vector2i(0,2) or i == Vector2i(1,0):
 				piece_atlas = Vector2i(3,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+				special_positions.append(cur_pos + i)
 			else:
 				piece_atlas = Vector2i(0,0)
 				set_cell(board_layer, cur_pos + i, tile_id, piece_atlas)
+
+	# Atualiza os tiles adjacentes após a peça pousar
+	update_adjacent_tiles()
+	
+		
+func update_adjacent_tiles():
+	var directions = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+
+	for pos in special_positions:
+		var occupied_count = 0
+		
+		# Conta quantas posições adjacentes estão ocupadas
+		for dir in directions:
+			if not is_free(pos + dir):
+				occupied_count += 1	
+		# Define a cor apenas para 2, 3 ou 4 espaços ocupados
+		var new_atlas = piece_atlas  # Mantém a cor original por padrão
+		if occupied_count	== 1:
+			new_atlas = Vector2i(3, 0)
+		elif occupied_count == 2:
+			new_atlas = Vector2i(3 + 1, 0)
+		elif occupied_count == 3:  # Para 3 ou 4 ocupados, usa o mesmo valor
+			new_atlas = Vector2i(3 + 2, 0)
+		elif occupied_count == 4:  # Para 3 ou 4 ocupados, usa o mesmo valor
+			new_atlas = Vector2i(3 + 3, 0)
+		
+		set_cell(active_layer, pos, tile_id, new_atlas)
 
 func clear_panel():
 	for i in range(14, 19):
